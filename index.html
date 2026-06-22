@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adobe Portfolio Map — How it all fits together</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0B0A09; --panel:#151311; --panel2:#1D1A17; --panel3:#272219;
+    --line:#2C2825; --line2:#3F3933;
+    --text:#F4F1ED; --muted:#A39C93; --faint:#71695F;
+    --red:#D83220; --red-2:#FF5240; --red-dim:rgba(216,50,32,.15); --red-line:rgba(216,50,32,.45);
+    --display:'Source Sans 3',system-ui,sans-serif;
+    --body:'Source Sans 3',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--black);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh;}
+  body::before{content:"";position:fixed;top:0;left:0;width:4px;height:100%;background:var(--red);z-index:90;}
+  ::selection{background:var(--red);color:#fff;}
+  a{color:inherit;}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:40;background:rgba(11,10,9,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+  .topbar{max-width:1180px;margin:0 auto;padding:18px 28px 0;display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 30px;}
+  .brand{display:flex;flex-direction:column;gap:5px;margin-right:auto;}
+  .wordmark{font-family:var(--display);font-weight:900;font-size:21px;letter-spacing:-.02em;color:var(--red);line-height:1;}
+  .eyebrow{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);}
+  .brand h1{font-family:var(--display);font-weight:900;font-size:24px;margin:0;letter-spacing:-.02em;line-height:1.04;}
+  .search{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 15px;min-width:220px;transition:border-color .15s;}
+  .search:focus-within{border-color:var(--red-line);}
+  .search svg{flex:none;opacity:.5;}
+  .search input{background:none;border:none;color:var(--text);font-family:var(--body);font-size:14px;width:100%;outline:none;}
+  .search input::placeholder{color:var(--faint);}
+
+  nav.modes{max-width:1180px;margin:0 auto;padding:14px 28px 0;display:flex;gap:2px;flex-wrap:wrap;}
+  .mode-tab{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--muted);background:none;border:none;cursor:pointer;padding:10px 16px 13px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+  .mode-tab:hover{color:var(--text);}
+  .mode-tab.active{color:var(--text);border-bottom-color:var(--red);}
+
+  main{max-width:1180px;margin:0 auto;padding:34px 28px 90px;}
+  .panel{display:none;animation:fade .35s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .intro{max-width:680px;margin-bottom:28px;}
+  .intro p{color:var(--muted);font-size:15px;margin:6px 0 0;}
+
+  /* Lens selector */
+  .lens-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+  .lens-row .lbl{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);}
+  .lens-btn{font-family:var(--display);font-size:14px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 16px;cursor:pointer;transition:all .15s;}
+  .lens-btn:hover{color:var(--text);border-color:var(--line2);}
+  .lens-btn.active{color:#fff;background:var(--red);border-color:var(--red);}
+
+  /* Groups & cards */
+  .group{margin-bottom:34px;}
+  .group-head{display:flex;align-items:baseline;gap:13px;padding-bottom:11px;margin-bottom:15px;border-bottom:1px solid var(--line);}
+  .group-idx{font-family:var(--display);font-weight:900;font-size:17px;color:var(--red);letter-spacing:-.01em;align-self:center;}
+  .group-head h2{font-family:var(--display);font-weight:900;font-size:20px;margin:0;letter-spacing:-.02em;}
+  .group-sub{font-size:13.5px;color:var(--muted);}
+  .group-count{margin-left:auto;font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:11px;}
+  .card{text-align:left;background:var(--panel);border:1px solid var(--line);border-left:3px solid transparent;border-radius:10px;padding:13px 15px;cursor:pointer;transition:transform .12s,border-color .12s,background .12s;display:flex;flex-direction:column;gap:5px;font-family:var(--body);}
+  .card:hover{transform:translateY(-2px);background:var(--panel2);border-color:var(--line2);border-left-color:var(--red);}
+  .card .nm{font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.01em;}
+  .card .ds{font-size:12.5px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .card .meta{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;}
+  .ptag{font-family:var(--display);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:2px 6px;}
+  .card.dim{opacity:.14;pointer-events:none;}
+  .empty{color:var(--faint);font-size:15px;font-style:italic;padding:44px 0;text-align:center;}
+
+  /* Drawer */
+  .scrim{position:fixed;inset:0;background:rgba(6,5,4,.66);z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .scrim.show{opacity:1;pointer-events:auto;}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(430px,92vw);z-index:70;background:var(--panel);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);overflow-y:auto;padding:30px 28px 50px;}
+  .drawer.show{transform:none;}
+  .drawer .close{position:absolute;top:20px;right:20px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:17px;line-height:1;}
+  .drawer .close:hover{color:var(--text);border-color:var(--line2);}
+  .d-bar{height:5px;width:48px;border-radius:3px;margin-bottom:18px;background:var(--red);}
+  .drawer h3{font-family:var(--display);font-weight:900;font-size:25px;margin:0 0 5px;letter-spacing:-.02em;line-height:1.06;}
+  .d-cloud{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:20px;}
+  .drawer .desc{font-size:15.5px;color:var(--text);line-height:1.6;margin-bottom:26px;}
+  .d-sec{margin-bottom:20px;}
+  .d-sec .h{font-family:var(--display);font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .tag{display:inline-flex;align-items:center;font-size:12.5px;font-weight:600;background:var(--red-dim);border:1px solid var(--red-line);border-radius:7px;padding:5px 10px;margin:0 5px 5px 0;color:#f4c8c0;}
+  .tag.none{color:var(--faint);font-style:italic;font-weight:400;background:none;border:1px solid var(--line);}
+  .d-loop{display:flex;flex-direction:column;gap:6px;}
+  .d-loopstage{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--faint);}
+  .d-loopstage.on{color:var(--text);font-weight:700;}
+  .d-loopstage .num{font-family:var(--display);font-weight:700;font-size:12px;width:18px;color:var(--faint);}
+  .d-loopstage .bar{flex:1;height:3px;border-radius:2px;background:var(--line);}
+  .d-loopstage.on .bar{background:var(--red);}
+
+  /* The Loop */
+  .loop-lead{max-width:700px;margin-bottom:32px;}
+  .loop-lead .big{font-family:var(--display);font-weight:900;font-size:clamp(21px,3.5vw,32px);line-height:1.18;letter-spacing:-.025em;margin:0 0 12px;}
+  .loop-lead .big em{font-style:normal;color:var(--red);}
+  .loop-lead p{color:var(--muted);font-size:15px;margin:0;}
+  .loopwrap{position:relative;margin-top:10px;}
+  .loop-stages{display:flex;gap:13px;overflow-x:auto;padding:8px 2px 22px;scroll-snap-type:x mandatory;}
+  .lstage{flex:1 1 0;min-width:152px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--red);border-radius:12px;padding:17px 15px;opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s,background .15s;}
+  .lstage.in{opacity:1;transform:none;}
+  .lstage:hover{background:var(--panel2);}
+  .lstage .num{font-family:var(--display);font-weight:700;font-size:11px;color:var(--red);letter-spacing:.12em;}
+  .lstage .verb{font-family:var(--display);font-weight:900;font-size:18px;margin:3px 0 5px;letter-spacing:-.02em;}
+  .lstage .what{font-size:12px;color:var(--muted);line-height:1.42;margin-bottom:12px;min-height:34px;}
+  .lstage .chip{display:block;width:100%;text-align:left;font-size:11.5px;font-weight:600;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 9px;margin-bottom:5px;cursor:pointer;font-family:var(--body);transition:background .12s,border-color .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lstage .chip:hover{background:var(--panel3);border-color:var(--red);}
+  .loop-return{display:flex;align-items:center;gap:10px;justify-content:center;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border-top:1px dashed var(--line2);padding-top:18px;margin-top:6px;}
+  .loop-return b{color:var(--red);}
+
+  /* Discovery */
+  .disc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}
+  .disc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px 24px 20px;display:flex;flex-direction:column;}
+  .disc .quote{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.32;letter-spacing:-.015em;margin:0;}
+  .disc .quote::before{content:"\201C";color:var(--red);}
+  .disc .quote::after{content:"\201D";color:var(--red);}
+  .disc .lead-in{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:16px 0 8px;}
+  .disc .play{font-family:var(--display);font-weight:900;font-size:15px;color:var(--red);margin-bottom:14px;letter-spacing:-.01em;line-height:1.25;}
+  .disc .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;}
+  .disc .stack button{font-size:12px;font-weight:600;font-family:var(--body);color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;transition:.12s;}
+  .disc .stack button:hover{border-color:var(--red);background:var(--panel3);}
+
+  /* Quiz */
+  .quiz{max-width:600px;margin:0 auto;}
+  .quiz-bar{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:18px;}
+  .quiz-bar b{color:var(--red);}
+  .q-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 28px;}
+  .q-kind{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;}
+  .q-text{font-family:var(--display);font-weight:900;font-size:23px;line-height:1.2;letter-spacing:-.02em;margin:0 0 22px;}
+  .q-text span{color:var(--red);}
+  .q-opts{display:flex;flex-direction:column;gap:9px;}
+  .q-opt{text-align:left;font-family:var(--body);font-size:14.5px;font-weight:500;color:var(--text);line-height:1.45;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer;transition:.12s;}
+  .q-opt:hover:not(:disabled){border-color:var(--line2);background:var(--panel3);}
+  .q-opt.correct{border-color:var(--red);background:var(--red-dim);color:#fff;font-weight:600;}
+  .q-opt.correct::before{content:"\2713  ";color:var(--red-2);font-weight:900;}
+  .q-opt.wrong{opacity:.45;border-color:var(--line);}
+  .q-opt.wrong::before{content:"\2715  ";color:var(--muted);font-weight:900;}
+  .q-opt:disabled{cursor:default;}
+  .q-next{margin-top:20px;font-family:var(--display);font-weight:700;font-size:14px;color:#fff;background:var(--red);border:none;border-radius:10px;padding:12px 24px;cursor:pointer;float:right;}
+  .q-next:hover{background:var(--red-2);}
+  .q-feedback{font-size:13.5px;color:var(--muted);margin-top:16px;min-height:20px;line-height:1.5;}
+
+  @media(max-width:640px){
+    .topbar{padding:16px 18px 0;}
+    nav.modes{padding:12px 18px 0;}
+    main{padding:26px 18px 80px;}
+    .search{order:3;width:100%;}
+    .loop-stages{flex-direction:column;}
+    .lstage{min-width:0;}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}.lstage{opacity:1;transform:none;}}
+
+  /* Role bar */
+  .rolebar{max-width:1180px;margin:2px auto 0;padding:13px 28px 15px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);}
+  .rb-label{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);}
+  .rb-opts{display:flex;gap:4px;flex-wrap:wrap;}
+  .role-btn{font-family:var(--display);font-size:13px;font-weight:600;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;transition:all .15s;}
+  .role-btn:hover{color:var(--text);border-color:var(--line2);}
+  .role-btn.active{color:#fff;background:var(--red);border-color:var(--red);}
+  .rb-context{flex-basis:100%;font-size:12.5px;color:var(--muted);line-height:1.45;display:none;}
+  .rb-context b{font-family:var(--display);font-weight:700;color:var(--text);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-right:5px;}
+  .rb-dot{color:var(--line2);margin:0 7px;}
+
+  /* Priority badge */
+  .card.key{border-left-color:var(--red);}
+  .keybadge{font-family:var(--display);font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--red);}
+
+  /* Discovery additions */
+  .signals{list-style:none;margin:0 0 2px;padding:0;display:flex;flex-direction:column;gap:4px;}
+  .signals li{font-size:12.5px;color:var(--muted);padding-left:15px;position:relative;line-height:1.35;}
+  .signals li::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--red);}
+  .rolejob{font-size:12.5px;color:var(--text);line-height:1.45;background:var(--red-dim);border:1px solid var(--red-line);border-radius:8px;padding:9px 11px;margin-bottom:14px;}
+  .rolejob .rj-role{font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--red-2);margin-right:6px;}
+
+  /* Roles mode */
+  .role-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(322px,1fr));gap:16px;}
+  .rolecard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;}
+  .rolecard.active{border-color:var(--red);}
+  .rc-top{display:flex;align-items:center;gap:10px;margin-bottom:15px;}
+  .rc-top h3{font-family:var(--display);font-weight:900;font-size:20px;margin:0;letter-spacing:-.02em;}
+  .rc-short{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.08em;color:var(--red);border:1px solid var(--red-line);border-radius:5px;padding:2px 7px;}
+  .rc-lens,.rc-need{font-size:13.5px;color:var(--muted);line-height:1.45;margin-bottom:9px;}
+  .rc-lens b,.rc-need b{display:block;font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
+  .rc-h{font-family:var(--display);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:16px 0 9px;}
+  .rc-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .rc-chips button{font-size:12px;font-weight:600;font-family:var(--body);color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 9px;cursor:pointer;transition:.12s;}
+  .rc-chips button:hover{border-color:var(--red);background:var(--panel3);}
+  .rc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+  .rc-list li{font-size:13px;color:var(--text);padding-left:16px;position:relative;line-height:1.4;}
+  .rc-list li::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--red);}
+  .rc-plays{display:flex;flex-direction:column;gap:11px;}
+  .rc-play{display:flex;flex-direction:column;gap:2px;}
+  .rc-pl{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:-.01em;color:var(--red);}
+  .rc-play .rc-pd{font-size:12.5px;color:var(--muted);line-height:1.42;}
+  .rc-view{margin-top:18px;font-family:var(--display);font-weight:700;font-size:12.5px;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:11px 14px;cursor:pointer;transition:.15s;}
+  .rc-view:hover{border-color:var(--red);color:#fff;}
+  .rolecard.active .rc-view{background:var(--red-dim);border-color:var(--red-line);color:var(--red-2);cursor:default;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <span class="wordmark">Adobe</span>
+      <span class="eyebrow">Technical pre-sales field map &middot; FY26</span>
+      <h1>How the portfolio fits together</h1>
+    </div>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="Search 60+ products\u2026" autocomplete="off">
+    </label>
+  </div>
+  <nav class="modes" id="modes">
+    <button class="mode-tab active" data-mode="explore">Explore</button>
+    <button class="mode-tab" data-mode="loop">The Loop</button>
+    <button class="mode-tab" data-mode="discovery">Discovery</button>
+    <button class="mode-tab" data-mode="roles">By role</button>
+    <button class="mode-tab" data-mode="quiz">Quiz yourself</button>
+  </nav>
+  <div class="rolebar">
+    <span class="rb-label">Viewing as</span>
+    <div class="rb-opts" id="roleOpts">
+      <button class="role-btn active" data-role="all">Whole team</button>
+      <button class="role-btn" data-role="ea">Enterprise Architect</button>
+      <button class="role-btn" data-role="sc">Solutions Consultant</button>
+      <button class="role-btn" data-role="sva">Sales Velocity Analyst</button>
+    </div>
+    <span class="rb-context" id="rbContext"></span>
+  </div>
+</header>
+
+<main>
+  <!-- EXPLORE -->
+  <section class="panel active" id="p-explore">
+    <div class="intro">
+      <p>Sixty-plus products, regrouped by whichever lens fits how you're thinking. Pick a role above to spotlight what matters to you, then click any product for its one-liner and where it sits in every framework.</p>
+    </div>
+    <div class="lens-row">
+      <span class="lbl">Group by</span>
+      <button class="lens-btn active" data-lens="cloud">Cloud</button>
+      <button class="lens-btn" data-lens="pillar">CXO pillar</button>
+      <button class="lens-btn" data-lens="play">FY26 sales play</button>
+      <button class="lens-btn" data-lens="sc">Team shorthand</button>
+    </div>
+    <div id="groups"></div>
+  </section>
+
+  <!-- LOOP -->
+  <section class="panel" id="p-loop">
+    <div class="loop-lead">
+      <p class="big">Adobe isn't a CMS, a CDP, or "creative tools." It's a <em>closed loop</em>: create &rarr; govern &rarr; store &rarr; connect to data &rarr; activate &rarr; measure &rarr; feed it back.</p>
+      <p>That loop is the real connection between the products — and the spine of every FY26 sales play. Hover a stage; click a product to inspect it.</p>
+    </div>
+    <div class="loopwrap">
+      <div class="loop-stages" id="loopStages"></div>
+      <div class="loop-return">Measurement <span style="color:var(--line2)">&#8594;</span> feeds the next round of <b>content &amp; experiences</b> <span style="color:var(--line2)">&#8635;</span></div>
+    </div>
+  </section>
+
+  <!-- DISCOVERY -->
+  <section class="panel" id="p-discovery">
+    <div class="intro">
+      <p>What the customer says, the signals behind it, the play you lead with, and the stack you whiteboard. Pick a role above to see your job in each. Click any chip to inspect a product.</p>
+    </div>
+    <div class="disc-grid" id="discGrid"></div>
+  </section>
+
+  <!-- ROLES -->
+  <section class="panel" id="p-roles">
+    <div class="intro">
+      <p>Three roles, one portfolio. Each lens, the things that role needs most, their priority products, and how every FY26 play reads to them. Click "View as" to carry that role across the whole dashboard.</p>
+    </div>
+    <div class="role-grid" id="roleGrid"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="panel" id="p-quiz">
+    <div class="quiz">
+      <div class="quiz-bar">
+        <span>Question <b id="qNum">1</b></span>
+        <span class="score">Score <b id="qScore">0</b> / <span id="qTotal">0</span></span>
+      </div>
+      <div class="q-card" id="qCard"></div>
+    </div>
+  </section>
+</main>
+
+<!-- drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+<script>
+/* ---------------- DATA: extracted from the two source maps ---------------- */
+const PILLAR = {
+  content:{label:'Content',color:'var(--content)',c:'#F0654A',desc:'Plan, make, manage, reuse & scale content'},
+  data:{label:'Data',color:'var(--data)',c:'#3FB6C4',desc:'Collect signals, unify profiles, build audiences, measure'},
+  experience:{label:'Experience',color:'var(--experience)',c:'#8C7AE6',desc:'Deliver the right journey, message & offer'},
+  document:{label:'Document',color:'var(--document)',c:'#E0A458',desc:'Create, sign & automate documents'}
+};
+const CLOUD = {
+  creative:{label:'Creative Cloud',c:'#F0654A',desc:'Where content gets made'},
+  experience:{label:'Experience Cloud',c:'#8C7AE6',desc:'Where content gets activated with customer data'},
+  document:{label:'Document Cloud',c:'#E0A458',desc:'Where documents & signatures get handled'}
+};
+const PLAY = {
+  csc:{label:'Content Supply Chain for the AI World',c:'#F0654A',desc:'Slow creation, weak reuse, fragmented workflow'},
+  ucx:{label:'Unified Customer Experience',c:'#8C7AE6',desc:'Channel-by-channel → customer-centric orchestration'},
+  b2b:{label:'B2B GTM Orchestration',c:'#5FBE88',desc:'Connect marketing, sales, web, content & commerce'}
+};
+const SC = {
+  content:{label:'1 · Content',c:'#F0654A'},
+  data:{label:'2 · Data',c:'#3FB6C4'},
+  experience:{label:'3 · Experience',c:'#8C7AE6'},
+  document:{label:'4 · Document',c:'#E0A458'},
+  b2b:{label:'5 · B2B specialization',c:'#5FBE88'}
+};
+const ROLES = {
+  all:{label:'Whole team', short:'All'},
+  ea:{label:'Enterprise Architect', short:'EA',
+      lens:'Platform & integration story',
+      need:'System boundaries, data flows, governance, extensibility, multi-product fit',
+      priorities:['Adobe Experience Platform','Real-Time CDP','Real-Time CDP B2B Edition','AEM Sites','AEM Assets','Workfront Workflow','Workfront Planning','Adobe Commerce','Adobe Journey Optimizer','Adobe Journey Optimizer B2B Edition'],
+      play:{csc:'Map the workflow, DAM, integration & governance model',
+            ucx:'Define the web / data / orchestration architecture',
+            b2b:'Define the B2B operating architecture across data, marketing, sales, content & commerce'}},
+  sc:{label:'Solutions Consultant', short:'SC',
+      lens:'Use-case & demo story',
+      need:'Business value, workflows, personas, "better together" demonstrations',
+      priorities:['Adobe Journey Optimizer','AEM Sites','AEM Assets','Adobe Firefly','Adobe Express','Adobe GenStudio','GenStudio for Performance Marketing','GenStudio for Content Marketing','Workfront Workflow','Workfront Planning','Customer Journey Analytics','Content Analytics'],
+      play:{csc:'Show how the supply chain works end-to-end',
+            ucx:'Demonstrate use cases across acquisition, engagement & content activation',
+            b2b:'Tell the "plan, create, engage, optimize" B2B story'}},
+  sva:{label:'Sales Velocity Analyst', short:'SVA',
+       lens:'GTM & play-mapping story',
+       need:'Install-base relevance, whitespace, play alignment, product clustering, entry points',
+       priorities:[],
+       concerns:['Which products cluster into which play','Which installed products open the next play','What cross-sell path makes sense','How to classify the opportunity'],
+       play:{csc:'Connect install base & whitespace to the correct strategic play',
+             ucx:'Identify whether the need aligns to acquisition, engagement or activation motions',
+             b2b:'Map opportunities to Marketing Orchestration, Campaign Acceleration, Content-led Growth or B2B Commerce'}}
+};
+let currentRole='all';
+function roleKey(p){ const R=ROLES[currentRole]; return currentRole!=='all' && R.priorities && R.priorities.includes(p.n); }
+const LOOP = [
+  {k:'create',c:'#F0654A',verb:'Create',what:'Make the content — images, video, design, generative variations.'},
+  {k:'govern',c:'#F0654A',verb:'Govern',what:'Plan the work, route approvals, manage handoffs.'},
+  {k:'store',c:'#E0A458',verb:'Store',what:'A single source of truth for approved assets.'},
+  {k:'connect',c:'#3FB6C4',verb:'Connect to data',what:'Decide who should get what, using unified profiles.'},
+  {k:'activate',c:'#8C7AE6',verb:'Activate',what:'Deliver the journey, site, campaign & commerce.'},
+  {k:'measure',c:'#3FB6C4',verb:'Measure',what:'Analyze what content & experiences actually worked.'},
+  {k:'document',c:'#E0A458',verb:'Documents',what:'Forms, contracts & signing when the journey turns to paper.'}
+];
+
+// p=primary cloud, pillars[], plays[], loop[], sc[], b2b flag, legacy flag
+const P = [
+  // — Creative Cloud core —
+  {n:'Creative Cloud',d:"Adobe's core creative suite for producing images, layouts, video, audio, illustration & design assets used downstream in marketing.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  {n:'Photoshop',d:"Flagship imaging tool for high-fidelity visual assets — often the origin point for campaign and brand creative.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Illustrator',d:"Vector design app for logos, iconography and scalable brand graphics that feed downstream channels.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'InDesign',d:"Page-layout tool for brochures, long-form content, digital publications and structured design assets.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Premiere Pro',d:"Professional video editing for campaign video, product storytelling and digital media content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'After Effects',d:"Motion graphics and visual-effects tool for high-impact animated content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Lightroom',d:"Cloud-based photo editing and organization for photographers and high-volume image workflows.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Lightroom Classic',d:"Desktop-focused photo cataloging and editing for large local photo libraries.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Audition',d:"Audio recording, mixing and restoration for podcasts, video and campaign sound.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Media Encoder',d:"Batch encoding and format conversion that prepares video output for every channel.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Animate',d:"Interactive animation tool for web, banners and rich-media content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Character Animator',d:"Real-time character animation driven by performance capture.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Fresco',d:"Drawing and painting app for illustration on tablet and desktop.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Substance 3D',d:"Family of tools for 3D modeling, texturing and rendering for product and immersive content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Bridge',d:"Centralized media browser for organizing and batch-managing creative files.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Capture',d:"Mobile tool that turns photos into usable palettes, patterns, brushes and vectors.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Dreamweaver',d:"Code-and-design web authoring tool for building and maintaining sites.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Adobe Fonts',d:"Licensed font library integrated across Adobe apps for consistent brand typography.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Adobe Stock',d:"Royalty-free stock images, video and templates that feed creative production.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Behance',d:"Adobe's portfolio and discovery network for creative professionals.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Portfolio',d:"Quick personal website builder for showcasing creative work.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Adobe Express',d:"Easy-to-use creation layer for marketers & business users who need to adapt approved content quickly while staying on brand.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  // — Firefly / generative —
+  {n:'Adobe Firefly',d:"Generative-AI family for commercially safer content generation across image, design, video and related workflows.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  {n:'Firefly Services',d:"API / service layer for automating asset generation and large-scale variation production.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  {n:'Firefly Custom Models',d:"Firefly models tailored to a customer's brand assets and styles so AI output stays brand-consistent.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  {n:'Adobe Firefly Foundry',d:"Higher-order Firefly platform component for more scalable, brand-governed generative production.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  // — Collaboration / work —
+  {n:'Frame.io',d:"Collaboration & review environment for creative and especially video workflows — accelerates feedback and approvals.",cl:'creative',pillars:['content'],plays:['csc'],loop:['govern'],sc:['content']},
+  {n:'Workfront Workflow',d:"Enterprise work management for orchestrating tasks, approvals, handoffs and operational process across teams.",cl:'experience',pillars:['content'],plays:['csc','b2b'],loop:['govern'],sc:['content']},
+  {n:'Workfront Planning',d:"Planning layer for campaign planning, calendaring, intake and visibility earlier than execution workflows.",cl:'experience',pillars:['content'],plays:['csc','b2b'],loop:['govern'],sc:['content']},
+  // — GenStudio —
+  {n:'Adobe GenStudio',d:"End-to-end content supply chain platform connecting workflow, creation, asset management and content measurement.",cl:'experience',pillars:['content'],plays:['csc'],loop:['create','activate'],sc:['content']},
+  {n:'GenStudio for Performance Marketing',d:"Marketer-facing app for producing and activating campaign content faster, with AI assistance and workflow integration.",cl:'experience',pillars:['content','experience'],plays:['csc','b2b'],loop:['create','activate'],sc:['content']},
+  {n:'GenStudio for Content Marketing',d:"Emerging FY26 layer for scaling content operations beyond pure performance-marketing use cases.",cl:'experience',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
+  // — Content management / DAM / CMS (content side) —
+  {n:'AEM Assets',d:"Enterprise DAM for storing, governing, finding, reusing and distributing approved assets — the source of truth.",cl:'experience',pillars:['content'],plays:['csc','ucx','b2b'],loop:['store'],sc:['content']},
+  {n:'Content Hub',d:"Broader asset-access layer for easier discovery and use of approved content by internal & external stakeholders.",cl:'experience',pillars:['content'],plays:[],loop:['store'],sc:['content']},
+  {n:'AEM Guides',d:"Component content management / structured content — especially for documentation-heavy, long-form publishing.",cl:'experience',pillars:['content'],plays:[],loop:['store'],sc:['content']},
+  {n:'AEM Forms',d:"Enterprise forms and document capture that plug into experiences and document-driven journeys.",cl:'experience',pillars:['content','document'],plays:[],loop:['document'],sc:['document']},
+  {n:'AEM Screens',d:"Digital-signage layer for delivering managed content to in-venue and physical screens.",cl:'experience',pillars:['content'],plays:[],loop:['activate'],sc:['content']},
+  {n:'Adobe Learning Manager',d:"Learning experience platform used in B2B content-led growth plays to deliver structured learning & enablement.",cl:'experience',pillars:['content'],plays:['b2b'],loop:['activate'],sc:['b2b']},
+
+  // — Data foundation —
+  {n:'Adobe Experience Platform',d:"Shared foundation for profile, identity, governance and services across Experience Cloud apps.",cl:'experience',pillars:['data'],plays:['ucx'],loop:['connect'],sc:['data']},
+  {n:'Real-Time CDP',d:"Customer data platform unifying known & unknown data into actionable real-time profiles and audiences.",cl:'experience',pillars:['data'],plays:['ucx'],loop:['connect'],sc:['data']},
+  {n:'Real-Time CDP B2B Edition',d:"B2B-focused customer/account data foundation for orchestrating buyer groups, accounts & downstream engagement.",cl:'experience',pillars:['data'],plays:['b2b'],loop:['connect'],sc:['b2b'],b2b:true},
+  {n:'Real-Time CDP Collaboration',d:"Collaboration layer for using audience data with partners & publishers in acquisition and media workflows.",cl:'experience',pillars:['data'],plays:['ucx'],loop:['connect'],sc:['data']},
+  {n:'Adobe Analytics',d:"Digital analytics for understanding customer behavior, content performance and business outcomes.",cl:'experience',pillars:['data'],plays:[],loop:['measure'],sc:['data']},
+  {n:'Customer Journey Analytics',d:"Cross-channel analytics for analyzing behavior across multiple datasets and touchpoints — not just web.",cl:'experience',pillars:['data'],plays:['ucx'],loop:['measure'],sc:['data']},
+  {n:'Customer Journey Analytics B2B Edition',d:"B2B analytics for account progression, buying-group behavior and pipeline performance.",cl:'experience',pillars:['data'],plays:['b2b'],loop:['measure'],sc:['b2b'],b2b:true},
+  {n:'Adobe Mix Modeler',d:"Measurement & planning for media effectiveness and optimizing investment decisions.",cl:'experience',pillars:['data'],plays:['ucx'],loop:['measure'],sc:['data']},
+  {n:'Content Analytics',d:"Measures which content assets, variants and creative attributes drive engagement and outcomes.",cl:'experience',pillars:['data'],plays:['csc','ucx','b2b'],loop:['measure'],sc:['data']},
+  {n:'Adobe Audience Manager',d:"Legacy DMP / audience management — still relevant in some installed-base and activation discussions.",cl:'experience',pillars:['data'],plays:[],loop:['connect'],sc:['data'],legacy:true},
+  {n:'Marketo Measure',d:"B2B attribution & revenue measurement connecting marketing touchpoints to pipeline and revenue.",cl:'experience',pillars:['data'],plays:['b2b'],loop:['measure'],sc:['b2b'],b2b:true},
+
+  // — Experience / journeys / activation —
+  {n:'AEM Sites',d:"Enterprise CMS for building, managing and delivering web experiences across headless & headed models.",cl:'experience',pillars:['content','experience'],plays:['ucx','b2b'],loop:['activate'],sc:['experience']},
+  {n:'AEM Sites Optimizer',d:"Optimization layer for improving site performance, discoverability and overall experience effectiveness.",cl:'experience',pillars:['experience'],plays:['ucx','b2b'],loop:['activate'],sc:['experience']},
+  {n:'LLM Optimizer',d:"AI-era visibility layer for making digital experiences discoverable in GenAI-driven discovery environments.",cl:'experience',pillars:['experience'],plays:['ucx','b2b'],loop:['activate'],sc:['experience']},
+  {n:'Brand Concierge',d:"Conversational experience layer for guided discovery and agentic brand interactions across web & commerce.",cl:'experience',pillars:['experience'],plays:['ucx','b2b'],loop:['activate'],sc:['experience']},
+  {n:'Adobe Journey Optimizer',d:"Cross-channel journey orchestration for personalized engagement across email, mobile, web and more.",cl:'experience',pillars:['experience'],plays:['ucx'],loop:['activate'],sc:['experience']},
+  {n:'AJO Experimentation Accelerator',d:"Experimentation enhancement for improving and validating journeys and content variations in-flight.",cl:'experience',pillars:['experience'],plays:['ucx'],loop:['activate','measure'],sc:['experience']},
+  {n:'Adobe Campaign',d:"Campaign management platform for more traditional cross-channel campaign orchestration and execution.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
+  {n:'Adobe Target',d:"Personalization & testing for optimizing experiences, offers and conversion outcomes.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
+  {n:'Marketo Engage',d:"B2B marketing engagement for lead management, nurturing, scoring and campaign execution.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['b2b'],b2b:true},
+  {n:'Adobe Journey Optimizer B2B Edition',d:"B2B journey layer for orchestrating buying-group & account-based engagement beyond classic lead automation.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['b2b'],b2b:true},
+  {n:'Adobe Commerce',d:"Commerce platform for B2C and B2B storefronts, transactions, self-service ordering and product experience.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['experience']},
+  {n:'Adobe Commerce Optimizer',d:"Optimization layer around commerce performance and customer outcomes in the shopping flow.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
+  {n:'Adobe Advertising',d:"Advertising layer for paid-media activation and optimization — usually adjacent to the core DX story.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
+
+  // — Document Cloud —
+  {n:'Acrobat',d:"Core document platform for creating, editing, reviewing and collaborating on PDFs and digital documents.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Acrobat Pro',d:"The full Acrobat tier with advanced editing, conversion, comparison and protection features.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Acrobat Standard',d:"Everyday Acrobat tier for creating, editing and signing PDFs.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Acrobat Reader',d:"Free PDF viewer for reading, annotating and signing documents.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Acrobat Sign',d:"E-signature & approval workflows for secure, legally recognized digital signing.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Adobe Scan',d:"Mobile document capture that turns physical pages into digital workflow inputs.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Document Services / PDF APIs',d:"Developer-facing services for embedding PDF operations and document workflows into business applications.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']}
+];
+
+/* ---------------- helpers ---------------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const byName=n=>P.find(p=>p.n===n);
+let currentLens='cloud', currentFilter='';
+
+const LENS = {
+  cloud:{cfg:CLOUD, key:p=>[p.cl], order:['creative','experience','document']},
+  pillar:{cfg:PILLAR, key:p=>p.pillars, order:['content','data','experience','document']},
+  play:{cfg:PLAY, key:p=>p.plays, order:['csc','ucx','b2b']},
+  sc:{cfg:SC, key:p=>p.sc, order:['content','data','experience','document','b2b']}
+};
+
+function pillarTags(p){ return p.pillars.map(k=>`<span class="ptag">${PILLAR[k].label}</span>`).join(''); }
+function matchFilter(p){ if(!currentFilter) return true; return (p.n+' '+p.d).toLowerCase().includes(currentFilter); }
+
+/* EXPLORE */
+function renderGroups(){
+  const L=LENS[currentLens], host=$('#groups'); host.innerHTML='';
+  const matched=P.filter(matchFilter);
+  if(matched.length===0){ host.innerHTML='<div class="empty">No products match \u201c'+currentFilter+'\u201d.</div>'; return; }
+  const buckets={}; L.order.forEach(k=>buckets[k]=[]); const unassigned=[];
+  P.forEach(p=>{ const keys=L.key(p); if(keys.length===0){ unassigned.push(p); return; } keys.forEach(k=>{ if(buckets[k]) buckets[k].push(p); }); });
+  let idx=0;
+  L.order.forEach(k=>{
+    const items=buckets[k]; if(!items.length) return; idx++;
+    const meta=L.cfg[k];
+    const sec=document.createElement('div'); sec.className='group';
+    sec.innerHTML=`<div class="group-head">
+        <span class="group-idx">${String(idx).padStart(2,'0')}</span>
+        <h2>${meta.label}</h2>
+        <span class="group-sub">${meta.desc}</span>
+        <span class="group-count">${items.length} product${items.length>1?'s':''}</span>
+      </div><div class="cards"></div>`;
+    const grid=sec.querySelector('.cards'); items.forEach(p=>grid.appendChild(makeCard(p))); host.appendChild(sec);
+  });
+  if(currentLens==='play' && unassigned.length){
+    const sec=document.createElement('div'); sec.className='group';
+    sec.innerHTML=`<div class="group-head">
+        <span class="group-idx" style="color:var(--faint)">&middot;</span>
+        <h2>Not in a primary FY26 play</h2>
+        <span class="group-sub">Installed base, adjacency &amp; supporting motions</span>
+        <span class="group-count">${unassigned.length} products</span>
+      </div><div class="cards"></div>`;
+    const grid=sec.querySelector('.cards'); unassigned.forEach(p=>grid.appendChild(makeCard(p))); host.appendChild(sec);
+  }
+}
+function makeCard(p){
+  const b=document.createElement('button'); b.className='card';
+  if(!matchFilter(p)) b.classList.add('dim');
+  const key=roleKey(p); if(key) b.classList.add('key');
+  b.innerHTML=`${key?'<span class="keybadge">\u2605 '+ROLES[currentRole].short+' priority</span>':''}<span class="nm">${p.n}</span><span class="ds">${p.d}</span><span class="meta">${pillarTags(p)}</span>`;
+  b.onclick=()=>openDrawer(p); return b;
+}
+
+/* DRAWER */
+function openDrawer(p){
+  const meta=CLOUD[p.cl];
+  const pillarsHtml=p.pillars.map(k=>`<span class="tag">${PILLAR[k].label}</span>`).join('');
+  const playsHtml=p.plays.length?p.plays.map(k=>`<span class="tag">${PLAY[k].label}</span>`).join(''):'<span class="tag none">Supporting / adjacency \u2014 not a primary play</span>';
+  const loopHtml=LOOP.map((s,i)=>{ const on=p.loop.includes(s.k);
+    return `<div class="d-loopstage ${on?'on':''}"><span class="num">${i+1}</span>${s.verb}<span class="bar"></span></div>`; }).join('');
+  const flags=[]; if(p.b2b) flags.push('B2B edition'); if(p.legacy) flags.push('Legacy / installed base');
+  const d=$('#drawer');
+  d.innerHTML=`
+    <button class="close" aria-label="Close">&times;</button>
+    <div class="d-bar"></div>
+    <h3>${p.n}</h3>
+    <div class="d-cloud">${meta.label}${flags.length?' &middot; '+flags.join(' &middot; '):''}</div>
+    <p class="desc">${p.d}</p>
+    <div class="d-sec"><div class="h">CXO pillar</div>${pillarsHtml}</div>
+    <div class="d-sec"><div class="h">FY26 sales plays</div>${playsHtml}</div>
+    <div class="d-sec"><div class="h">Where it sits in the loop</div><div class="d-loop">${loopHtml}</div></div>`;
+  d.querySelector('.close').onclick=closeDrawer;
+  d.classList.add('show'); d.setAttribute('aria-hidden','false'); $('#scrim').classList.add('show');
+}
+function closeDrawer(){ $('#drawer').classList.remove('show'); $('#drawer').setAttribute('aria-hidden','true'); $('#scrim').classList.remove('show'); }
+$('#scrim').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDrawer(); });
+
+/* THE LOOP */
+function renderLoop(){
+  const host=$('#loopStages'); host.innerHTML='';
+  LOOP.forEach((s,i)=>{
+    const items=P.filter(p=>p.loop.includes(s.k));
+    const show=items.slice(0,7); const extra=items.length-show.length;
+    const el=document.createElement('div'); el.className='lstage';
+    el.innerHTML=`<div class="num">STAGE ${i+1}</div><div class="verb">${s.verb}</div><div class="what">${s.what}</div>`+
+      show.map(p=>`<button class="chip${roleKey(p)?' key':''}" data-n="${p.n}">${p.n}</button>`).join('')+
+      (extra>0?`<div style="font-size:11px;color:var(--faint);margin-top:4px;font-weight:700">+${extra} more</div>`:'');
+    el.querySelectorAll('.chip').forEach(c=>c.onclick=()=>openDrawer(byName(c.dataset.n)));
+    host.appendChild(el);
+  });
+}
+let loopShown=false;
+function animateLoop(){ if(loopShown) return; loopShown=true; $$('.lstage').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*90)); }
+
+/* DISCOVERY */
+const SCENARIOS=[
+  {q:"We can't make enough content fast enough.",play:'csc',
+   signals:['Slow content production','Low asset reuse','Weak workflow visibility','Poor approvals & handoffs','Limited ability to scale content with AI'],
+   stack:['Creative Cloud','Adobe Firefly','Adobe Express','Workfront Workflow','Frame.io','AEM Assets','Adobe GenStudio','Content Analytics']},
+  {q:"Our channels are disconnected and we can't personalize at scale.",play:'ucx',
+   signals:['Fragmented channels','Siloed data','Inconsistent customer engagement','Weak acquisition measurement','Need for AI-ready web & journey orchestration'],
+   stack:['Adobe Experience Platform','Real-Time CDP','Adobe Journey Optimizer','Customer Journey Analytics','AEM Sites','Content Analytics']},
+  {q:"Our B2B marketing and sales motions are fragmented.",play:'b2b',
+   signals:['Disconnected marketing & sales systems','Slow B2B campaign production','Weak account / buying-group orchestration','Poor content-led pipeline generation','Need to digitize B2B commerce'],
+   stack:['Marketo Engage','Adobe Journey Optimizer B2B Edition','Real-Time CDP B2B Edition','Customer Journey Analytics B2B Edition','AEM Sites','AEM Assets','GenStudio for Performance Marketing','Adobe Commerce']},
+  {q:"We need documents, forms, approvals and signatures inside the journey.",play:null,playName:'Document Cloud',
+   stack:['Acrobat','Acrobat Sign','Document Services / PDF APIs','AEM Forms']}
+];
+function renderDiscovery(){
+  const host=$('#discGrid'); host.innerHTML='';
+  SCENARIOS.forEach(s=>{
+    const playLabel = s.play ? 'Lead with \u2192 '+PLAY[s.play].label : 'Bring in \u2192 '+s.playName;
+    const signalsHtml = s.signals ? `<div class="lead-in">Signals you're hearing</div><ul class="signals">${s.signals.map(x=>`<li>${x}</li>`).join('')}</ul>` : '';
+    let roleHtml='';
+    if(currentRole!=='all' && s.play && ROLES[currentRole].play){
+      roleHtml = `<div class="rolejob"><span class="rj-role">${ROLES[currentRole].short}</span>${ROLES[currentRole].play[s.play]}</div>`;
+    }
+    const el=document.createElement('div'); el.className='disc';
+    el.innerHTML=`<p class="quote">${s.q}</p>
+      ${signalsHtml}
+      <div class="lead-in">Your move</div>
+      <div class="play">${playLabel}</div>
+      ${roleHtml}
+      <div class="stack">${s.stack.map(n=>`<button data-n="${n}">${n}</button>`).join('')}</div>`;
+    el.querySelectorAll('.stack button').forEach(b=>b.onclick=()=>{const p=byName(b.dataset.n); if(p) openDrawer(p);});
+    host.appendChild(el);
+  });
+}
+
+/* BY ROLE */
+function renderRoles(){
+  const host=$('#roleGrid'); host.innerHTML='';
+  ['ea','sc','sva'].forEach(rk=>{
+    const r=ROLES[rk]; const active=currentRole===rk;
+    const prods = (r.priorities && r.priorities.length)
+      ? `<div class="rc-h">Key products</div><div class="rc-chips">${r.priorities.map(n=>`<button data-n="${n}">${n}</button>`).join('')}</div>`
+      : `<div class="rc-h">Works by</div><ul class="rc-list">${r.concerns.map(c=>`<li>${c}</li>`).join('')}</ul>`;
+    const plays = `<div class="rc-h">Across the FY26 plays</div><div class="rc-plays">`+
+      ['csc','ucx','b2b'].map(pk=>`<div class="rc-play"><span class="rc-pl">${PLAY[pk].label}</span><span class="rc-pd">${r.play[pk]}</span></div>`).join('')+`</div>`;
+    const el=document.createElement('div'); el.className='rolecard'+(active?' active':'');
+    el.innerHTML=`<div class="rc-top"><h3>${r.label}</h3><span class="rc-short">${r.short}</span></div>
+      <div class="rc-lens"><b>Best lens</b>${r.lens}</div>
+      <div class="rc-need"><b>Needs most</b>${r.need}</div>
+      ${prods}${plays}
+      <button class="rc-view" data-role="${rk}">${active?'\u2713 Currently viewing as '+r.short:'View dashboard as '+r.short}</button>`;
+    el.querySelectorAll('.rc-chips button').forEach(b=>b.onclick=()=>{const p=byName(b.dataset.n); if(p) openDrawer(p);});
+    const vb=el.querySelector('.rc-view'); if(!active) vb.onclick=()=>setRole(rk);
+    host.appendChild(el);
+  });
+}
+function setRole(r){
+  currentRole=r;
+  $$('.role-btn').forEach(b=>b.classList.toggle('active',b.dataset.role===r));
+  const ctx=$('#rbContext');
+  if(r==='all'){ ctx.style.display='none'; ctx.innerHTML=''; }
+  else{ const R=ROLES[r]; ctx.style.display='block'; ctx.innerHTML=`<b>Best lens</b>${R.lens} <span class="rb-dot">&middot;</span> <b>Needs</b>${R.need}`; }
+  renderGroups(); renderDiscovery(); renderRoles(); renderRoles();
+  if($('#p-loop').classList.contains('active')){ renderLoop(); $$('.lstage').forEach(el=>el.classList.add('in')); }
+}
+
+/* ---------------- QUIZ ---------------- */
+let qNum=0,qScore=0,qTotal=0,answered=false;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pick(a){return a[(Math.random()*a.length)|0];}
+
+function makeQuestion(){
+  const kinds=['desc','cloud','play'];
+  let kind=pick(kinds);
+  const playable=P.filter(p=>p.plays.length);
+  if(kind==='play' && !playable.length) kind='cloud';
+
+  if(kind==='desc'){
+    const p=pick(P);
+    const wrongs=shuffle(P.filter(x=>x.n!==p.n)).slice(0,3).map(x=>({t:x.d,ok:false}));
+    return {kind:'What does this product do?',text:p.n,opts:shuffle([{t:p.d,ok:true},...wrongs]),
+      fb:`${p.n} lives in ${CLOUD[p.cl].label}.`};
+  }
+  if(kind==='cloud'){
+    const p=pick(P);
+    const opts=Object.keys(CLOUD).map(k=>({t:CLOUD[k].label,ok:k===p.cl}));
+    return {kind:'Which cloud does it belong to?',text:p.n,opts:shuffle(opts),
+      fb:`${p.d}`};
+  }
+  // play
+  const p=pick(playable);
+  const correct=p.plays[0];
+  const opts=Object.keys(PLAY).map(k=>({t:PLAY[k].label,ok:p.plays.includes(k)}));
+  // ensure single correct selection logic: mark first match correct
+  let firstDone=false;
+  const finalOpts=opts.map(o=>{ if(o.ok && !firstDone){firstDone=true;return o;} return {t:o.t,ok:o.ok};});
+  return {kind:'Which FY26 sales play features it?',text:p.n,opts:shuffle(finalOpts),
+    fb:`${p.n}: ${p.d}`};
+}
+function renderQuiz(){
+  answered=false;
+  const q=makeQuestion();
+  qNum++; $('#qNum').textContent=qNum;
+  const card=$('#qCard');
+  card.innerHTML=`<div class="q-kind">${q.kind}</div>
+    <h3 class="q-text"><span>${q.text}</span></h3>
+    <div class="q-opts"></div>
+    <div class="q-feedback"></div>`;
+  const opts=card.querySelector('.q-opts');
+  q.opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='q-opt'; b.textContent=o.t;
+    b.onclick=()=>{
+      if(answered) return; answered=true; qTotal++;
+      $('#qTotal').textContent=qTotal;
+      card.querySelectorAll('.q-opt').forEach(x=>x.disabled=true);
+      if(o.ok){ b.classList.add('correct'); qScore++; $('#qScore').textContent=qScore; }
+      else{
+        b.classList.add('wrong');
+        card.querySelectorAll('.q-opt').forEach(x=>{ if(q.opts[[...opts.children].indexOf(x)] && q.opts[[...opts.children].indexOf(x)].ok) x.classList.add('correct'); });
+      }
+      card.querySelector('.q-feedback').textContent=q.fb;
+      const nx=document.createElement('button'); nx.className='q-next'; nx.textContent='Next →';
+      nx.onclick=renderQuiz; card.appendChild(nx);
+    };
+    opts.appendChild(b);
+  });
+}
+
+/* ---------------- mode switching ---------------- */
+function setMode(m){
+  $$('.mode-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===m));
+  $$('.panel').forEach(pl=>pl.classList.remove('active'));
+  $('#p-'+m).classList.add('active');
+  $('.search').style.visibility = (m==='explore')?'visible':'hidden';
+  if(m==='loop'){ loopShown=false; renderLoop(); requestAnimationFrame(()=>setTimeout(animateLoop,60)); }
+  if(m==='roles'){ renderRoles(); }
+  if(m==='quiz' && qNum===0){ renderQuiz(); }
+}
+$$('.mode-tab').forEach(t=>t.onclick=()=>setMode(t.dataset.mode));
+$$('.lens-btn').forEach(b=>b.onclick=()=>{
+  $$('.lens-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); currentLens=b.dataset.lens; renderGroups();
+});
+$$('.role-btn').forEach(b=>b.onclick=()=>setRole(b.dataset.role));
+$('#search').addEventListener('input',e=>{ currentFilter=e.target.value.trim().toLowerCase(); renderGroups(); });
+
+/* init */
+renderGroups(); renderDiscovery();
+</script>
+</body>
+</html>
