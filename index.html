@@ -200,6 +200,40 @@
   .rc-view{margin-top:18px;font-family:var(--display);font-weight:700;font-size:12.5px;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:11px 14px;cursor:pointer;transition:.15s;}
   .rc-view:hover{border-color:var(--red);color:#fff;}
   .rolecard.active .rc-view{background:var(--red-dim);border-color:var(--red-line);color:var(--red-2);cursor:default;}
+
+  /* Sales plays mode */
+  .playblock{margin-bottom:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);}
+  .pb-head{padding:20px 22px 17px;border-bottom:1px solid var(--line);border-top:3px solid var(--red);}
+  .pb-head h2{font-family:var(--display);font-weight:900;font-size:21px;margin:0 0 6px;letter-spacing:-.02em;}
+  .pb-head .pb-prob{font-size:13.5px;color:var(--muted);line-height:1.5;margin:0;max-width:760px;}
+  .pb-body{padding:8px 22px 18px;}
+  .splay{padding:15px 0;border-bottom:1px solid var(--line);}
+  .splay:last-child{border-bottom:none;}
+  .splay .sp-name{font-family:var(--display);font-weight:700;font-size:13.5px;letter-spacing:-.01em;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:9px;}
+  .splay .sp-name::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);flex:none;}
+  .sp-chips{display:flex;flex-wrap:wrap;gap:6px;padding-left:16px;}
+  .sp-chips button{font-size:12px;font-weight:600;font-family:var(--body);color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;transition:.12s;}
+  .sp-chips button:hover{border-color:var(--red);background:var(--panel3);}
+
+  .h2refresh{border:1px solid var(--red-line);background:var(--red-dim);border-radius:14px;padding:22px 24px;margin:6px 0 40px;}
+  .h2refresh h3{font-family:var(--display);font-weight:900;font-size:17px;margin:0 0 4px;letter-spacing:-.01em;}
+  .h2refresh .h2-sub{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.45;}
+  .h2-em{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px;}
+  .h2-em .e{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .h2-em .e .et{font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--red-2);letter-spacing:-.01em;}
+  .h2-em .e .en{font-size:12px;color:var(--muted);line-height:1.4;margin-top:3px;}
+  .h2-sup{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .h2-sup b{font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:5px;}
+  .h2-sup .pill{display:inline-block;font-size:11.5px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 9px;margin:0 5px 5px 0;}
+
+  .clusters-title{font-family:var(--display);font-weight:900;font-size:20px;margin:0 0 4px;letter-spacing:-.02em;}
+  .clusters-sub{font-size:13.5px;color:var(--muted);margin:0 0 18px;}
+  .cluster-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .cluster{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;}
+  .cluster h4{font-family:var(--display);font-weight:700;font-size:14.5px;margin:0 0 12px;letter-spacing:-.01em;}
+  .cluster .cl-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .cluster .cl-chips button{font-size:12px;font-weight:600;font-family:var(--body);color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 9px;cursor:pointer;transition:.12s;}
+  .cluster .cl-chips button:hover{border-color:var(--red);background:var(--panel3);}
 </style>
 </head>
 <body>
@@ -213,13 +247,14 @@
     </div>
     <label class="search">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="search" type="text" placeholder="Search 60+ products\u2026" autocomplete="off">
+      <input id="search" type="text" placeholder="Search 75+ products\u2026" autocomplete="off">
     </label>
   </div>
   <nav class="modes" id="modes">
     <button class="mode-tab active" data-mode="explore">Explore</button>
     <button class="mode-tab" data-mode="loop">The Loop</button>
     <button class="mode-tab" data-mode="discovery">Discovery</button>
+    <button class="mode-tab" data-mode="plays">Sales plays</button>
     <button class="mode-tab" data-mode="roles">By role</button>
     <button class="mode-tab" data-mode="quiz">Quiz yourself</button>
   </nav>
@@ -239,7 +274,7 @@
   <!-- EXPLORE -->
   <section class="panel active" id="p-explore">
     <div class="intro">
-      <p>Sixty-plus products, regrouped by whichever lens fits how you're thinking. Pick a role above to spotlight what matters to you, then click any product for its one-liner and where it sits in every framework.</p>
+      <p>Seventy-five-plus products, regrouped by whichever lens fits how you're thinking. Pick a role above to spotlight what matters to you, then click any product for its one-liner and where it sits in every framework.</p>
     </div>
     <div class="lens-row">
       <span class="lbl">Group by</span>
@@ -269,6 +304,18 @@
       <p>What the customer says, the signals behind it, the play you lead with, and the stack you whiteboard. Pick a role above to see your job in each. Click any chip to inspect a product.</p>
     </div>
     <div class="disc-grid" id="discGrid"></div>
+  </section>
+
+  <!-- SALES PLAYS -->
+  <section class="panel" id="p-plays">
+    <div class="intro">
+      <p>The three FY26 portfolio plays, each broken into its strategic plays and the products that carry them. Below that, the H2 framing refresh and the "better-together" clusters. Click any product to inspect it.</p>
+    </div>
+    <div id="playStack"></div>
+    <div class="h2refresh" id="h2refresh"></div>
+    <h2 class="clusters-title">Better-together clusters</h2>
+    <p class="clusters-sub">Common starting bundles — useful for spotting whitespace and the next logical cross-sell.</p>
+    <div class="cluster-grid" id="clusterGrid"></div>
   </section>
 
   <!-- ROLES -->
@@ -339,8 +386,14 @@ const ROLES = {
   sva:{label:'Sales Velocity Analyst', short:'SVA',
        lens:'GTM & play-mapping story',
        need:'Install-base relevance, whitespace, play alignment, product clustering, entry points',
-       priorities:[],
-       concerns:['Which products cluster into which play','Which installed products open the next play','What cross-sell path makes sense','How to classify the opportunity'],
+       priorities:['AEM Assets','Workfront Workflow','Adobe Express','GenStudio for Performance Marketing','Adobe Journey Optimizer','Real-Time CDP','Customer Journey Analytics','AEM Sites','Marketo Engage','Adobe Journey Optimizer B2B Edition','Real-Time CDP B2B Edition','Adobe Commerce'],
+       concerns:['Which products cluster into which play','Which installed products open the next play','What cross-sell path makes sense','How to classify the opportunity fast'],
+       expansion:[
+         {from:'AEM Assets', to:['GenStudio for Performance Marketing','Adobe Express','Content Analytics']},
+         {from:'Marketo Engage', to:['Adobe Journey Optimizer B2B Edition','Real-Time CDP B2B Edition','Customer Journey Analytics B2B Edition']},
+         {from:'AJO / Real-Time CDP', to:['Customer Journey Analytics','Content Analytics']},
+         {from:'Creative Cloud', to:['Workfront Workflow','AEM Assets','Adobe Express']}
+       ],
        play:{csc:'Connect install base & whitespace to the correct strategic play',
              ucx:'Identify whether the need aligns to acquisition, engagement or activation motions',
              b2b:'Map opportunities to Marketing Orchestration, Campaign Acceleration, Content-led Growth or B2B Commerce'}}
@@ -357,6 +410,59 @@ const LOOP = [
   {k:'document',c:'#E0A458',verb:'Documents',what:'Forms, contracts & signing when the journey turns to paper.'}
 ];
 
+/* FY26 strategic plays nested inside each portfolio play (source: FY26 GTM & sales-play guides) */
+const SPLAYS = {
+  csc:{ problem:'Limited creative capacity, weak end-to-end visibility, poor asset reuse, fragmented approvals, and little performance feedback into content decisions.',
+    items:[
+      {n:'Workflow, Planning & Metadata', prods:['Workfront Workflow','Workfront Planning','Frame.io','AEM Assets']},
+      {n:'Supercharge Creative Teams', prods:['Creative Cloud','Adobe Firefly','Frame.io','Firefly Custom Models','Adobe Firefly Foundry']},
+      {n:'Scaled Content Production', prods:['Firefly Services','Firefly Custom Models','Adobe Firefly Foundry']},
+      {n:'On-brand Creation for Marketers & Beyond', prods:['Adobe Express','GenStudio for Performance Marketing','GenStudio for Content Marketing']},
+      {n:'Asset Management & Reuse', prods:['AEM Assets','Workfront Workflow']},
+      {n:'Content Insights', prods:['Content Analytics','GenStudio for Performance Marketing']}
+    ]},
+  ucx:{ problem:'Fragmented data and channels, disjointed lifecycle engagement, static digital experiences, weak acquisition measurement, and trouble aligning content with journey activation.',
+    items:[
+      {n:'Agentic Brand Activation', prods:['AEM Sites','AEM Sites Optimizer','LLM Optimizer','Brand Concierge']},
+      {n:'Customer Acquisition', prods:['Real-Time CDP','Real-Time CDP Collaboration','Adobe Mix Modeler','Customer Journey Analytics','Content Analytics']},
+      {n:'Customer-centric Engagement', prods:['Adobe Journey Optimizer','Real-Time CDP','Customer Journey Analytics','AJO Experimentation Accelerator']},
+      {n:'Omnichannel Content Activation', prods:['Adobe Journey Optimizer','AEM Assets','AEM Sites','Content Analytics','AJO Experimentation Accelerator']}
+    ]},
+  b2b:{ problem:'Disconnected marketing and sales systems, weak buying-group orchestration, slow campaign production, poor content-led demand generation, and a need to align B2B web and commerce.',
+    items:[
+      {n:'Marketing Orchestration', prods:['Adobe Journey Optimizer B2B Edition','Marketo Engage','Real-Time CDP B2B Edition','Customer Journey Analytics B2B Edition','Brand Concierge']},
+      {n:'Campaign Acceleration', prods:['GenStudio for Performance Marketing','Workfront Workflow','Workfront Planning','GenStudio for Content Marketing']},
+      {n:'Content-led Growth', prods:['AEM Sites','AEM Assets','Adobe Learning Manager','AEM Sites Optimizer','LLM Optimizer']},
+      {n:'B2B Commerce', prods:['Adobe Commerce','Adobe Journey Optimizer B2B Edition','AEM Assets','AEM Sites']}
+    ]}
+};
+function strategicPlaysFor(name){
+  const out=[];
+  Object.keys(SPLAYS).forEach(pk=>SPLAYS[pk].items.forEach(it=>{ if(it.prods.includes(name)) out.push({play:pk, name:it.n}); }));
+  return out;
+}
+
+/* FY26 H2 refresh: framing emphasis shift (source: FY26 Sales Play H2 Refresh) */
+const H2 = {
+  emphasized:[
+    {n:'Content Supply Chain for the AI World', note:'Workfront + AEM Assets + Firefly + Express + GenStudio'},
+    {n:'Customer Engagement', note:'AJO + Real-Time CDP + Customer Journey Analytics'},
+    {n:'Brand Visibility', note:'AEM Sites + Sites Optimizer + LLM Optimizer + Brand Concierge'},
+    {n:'Acrobat', note:'Elevated as its own enterprise pillar'}
+  ],
+  supporting:['Customer Acquisition','Omnichannel Content Activation','B2B Commerce','Content Reporting & Insights']
+};
+
+/* "Better-together" clusters (source: dashboard taxonomy guidance) */
+const CLUSTERS = [
+  {n:'Content supply chain starter', prods:['Creative Cloud','Adobe Express','Adobe Firefly','Workfront Workflow','Frame.io','AEM Assets']},
+  {n:'Modern web + activation', prods:['AEM Sites','AEM Assets','Adobe Journey Optimizer','Content Analytics']},
+  {n:'Data foundation + journey intelligence', prods:['Adobe Experience Platform','Real-Time CDP','Customer Journey Analytics','Adobe Analytics','Adobe Mix Modeler']},
+  {n:'B2B GTM modernization', prods:['Marketo Engage','Adobe Journey Optimizer B2B Edition','Real-Time CDP B2B Edition','Customer Journey Analytics B2B Edition','AEM Sites','AEM Assets','Adobe Commerce']},
+  {n:'AI-era brand visibility', prods:['AEM Sites','AEM Sites Optimizer','LLM Optimizer','Brand Concierge']},
+  {n:'Document-heavy digital workflow', prods:['Acrobat','Acrobat Sign','Document Services / PDF APIs','AEM Forms']}
+];
+
 // p=primary cloud, pillars[], plays[], loop[], sc[], b2b flag, legacy flag
 const P = [
   // — Creative Cloud core —
@@ -364,6 +470,7 @@ const P = [
   {n:'Photoshop',d:"Flagship imaging tool for high-fidelity visual assets — often the origin point for campaign and brand creative.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Illustrator',d:"Vector design app for logos, iconography and scalable brand graphics that feed downstream channels.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'InDesign',d:"Page-layout tool for brochures, long-form content, digital publications and structured design assets.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'InCopy',d:"Editorial writing tool that works in lockstep with InDesign so writers and designers collaborate on the same layout.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Premiere Pro',d:"Professional video editing for campaign video, product storytelling and digital media content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'After Effects',d:"Motion graphics and visual-effects tool for high-impact animated content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Lightroom',d:"Cloud-based photo editing and organization for photographers and high-volume image workflows.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
@@ -373,7 +480,9 @@ const P = [
   {n:'Animate',d:"Interactive animation tool for web, banners and rich-media content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Character Animator',d:"Real-time character animation driven by performance capture.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Fresco',d:"Drawing and painting app for illustration on tablet and desktop.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
-  {n:'Substance 3D',d:"Family of tools for 3D modeling, texturing and rendering for product and immersive content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Substance 3D',d:"Family of tools (Designer, Painter, Sampler, Stager, Modeler) for 3D modeling, texturing and rendering for product and immersive content.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Dimension',d:"3D scene composition and photorealistic rendering for product mockups and branded still visuals.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Aero',d:"Augmented-reality authoring tool for building and sharing immersive AR experiences.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Bridge',d:"Centralized media browser for organizing and batch-managing creative files.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Capture',d:"Mobile tool that turns photos into usable palettes, patterns, brushes and vectors.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Dreamweaver',d:"Code-and-design web authoring tool for building and maintaining sites.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
@@ -381,6 +490,8 @@ const P = [
   {n:'Adobe Stock',d:"Royalty-free stock images, video and templates that feed creative production.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Behance',d:"Adobe's portfolio and discovery network for creative professionals.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
   {n:'Portfolio',d:"Quick personal website builder for showcasing creative work.",cl:'creative',pillars:['content'],plays:[],loop:['create'],sc:['content']},
+  {n:'Creative Cloud Libraries',d:"Shared brand-asset and component system that keeps colors, type, logos and templates consistent across Adobe apps.",cl:'creative',pillars:['content'],plays:[],loop:['store'],sc:['content']},
+  {n:'Creative Cloud Storage / Files',d:"Cloud storage and file-syncing layer that keeps creative work available and collaborative across devices and teams.",cl:'creative',pillars:['content'],plays:[],loop:['store'],sc:['content']},
   {n:'Adobe Express',d:"Easy-to-use creation layer for marketers & business users who need to adapt approved content quickly while staying on brand.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
   // — Firefly / generative —
   {n:'Adobe Firefly',d:"Generative-AI family for commercially safer content generation across image, design, video and related workflows.",cl:'creative',pillars:['content'],plays:['csc'],loop:['create'],sc:['content']},
@@ -391,6 +502,7 @@ const P = [
   {n:'Frame.io',d:"Collaboration & review environment for creative and especially video workflows — accelerates feedback and approvals.",cl:'creative',pillars:['content'],plays:['csc'],loop:['govern'],sc:['content']},
   {n:'Workfront Workflow',d:"Enterprise work management for orchestrating tasks, approvals, handoffs and operational process across teams.",cl:'experience',pillars:['content'],plays:['csc','b2b'],loop:['govern'],sc:['content']},
   {n:'Workfront Planning',d:"Planning layer for campaign planning, calendaring, intake and visibility earlier than execution workflows.",cl:'experience',pillars:['content'],plays:['csc','b2b'],loop:['govern'],sc:['content']},
+  {n:'Workfront Fusion',d:"Low-code automation & integration layer that connects Workfront to other systems and orchestrates work across tools.",cl:'experience',pillars:['content'],plays:['csc','b2b'],loop:['govern'],sc:['content']},
   // — GenStudio —
   {n:'Adobe GenStudio',d:"End-to-end content supply chain platform connecting workflow, creation, asset management and content measurement.",cl:'experience',pillars:['content'],plays:['csc'],loop:['create','activate'],sc:['content']},
   {n:'GenStudio for Performance Marketing',d:"Marketer-facing app for producing and activating campaign content faster, with AI assistance and workflow integration.",cl:'experience',pillars:['content','experience'],plays:['csc','b2b'],loop:['create','activate'],sc:['content']},
@@ -398,6 +510,7 @@ const P = [
   // — Content management / DAM / CMS (content side) —
   {n:'AEM Assets',d:"Enterprise DAM for storing, governing, finding, reusing and distributing approved assets — the source of truth.",cl:'experience',pillars:['content'],plays:['csc','ucx','b2b'],loop:['store'],sc:['content']},
   {n:'Content Hub',d:"Broader asset-access layer for easier discovery and use of approved content by internal & external stakeholders.",cl:'experience',pillars:['content'],plays:[],loop:['store'],sc:['content']},
+  {n:'AEM Content & Experience Fragments',d:"Reusable structured-content and experience components that power composable, omnichannel delivery from AEM.",cl:'experience',pillars:['content'],plays:['ucx','b2b'],loop:['store'],sc:['content']},
   {n:'AEM Guides',d:"Component content management / structured content — especially for documentation-heavy, long-form publishing.",cl:'experience',pillars:['content'],plays:[],loop:['store'],sc:['content']},
   {n:'AEM Forms',d:"Enterprise forms and document capture that plug into experiences and document-driven journeys.",cl:'experience',pillars:['content','document'],plays:[],loop:['document'],sc:['document']},
   {n:'AEM Screens',d:"Digital-signage layer for delivering managed content to in-venue and physical screens.",cl:'experience',pillars:['content'],plays:[],loop:['activate'],sc:['content']},
@@ -427,8 +540,10 @@ const P = [
   {n:'Adobe Target',d:"Personalization & testing for optimizing experiences, offers and conversion outcomes.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
   {n:'Marketo Engage',d:"B2B marketing engagement for lead management, nurturing, scoring and campaign execution.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['b2b'],b2b:true},
   {n:'Adobe Journey Optimizer B2B Edition',d:"B2B journey layer for orchestrating buying-group & account-based engagement beyond classic lead automation.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['b2b'],b2b:true},
+  {n:'Dynamic Chat',d:"Conversational engagement tool inside Marketo-led B2B flows for qualifying and routing prospects in real time.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['b2b'],b2b:true},
   {n:'Adobe Commerce',d:"Commerce platform for B2C and B2B storefronts, transactions, self-service ordering and product experience.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['experience']},
   {n:'Adobe Commerce Optimizer',d:"Optimization layer around commerce performance and customer outcomes in the shopping flow.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
+  {n:'Commerce as a Cloud Service',d:"Cloud-delivered Adobe Commerce model referenced in FY26 mapping — relevant in commerce modernization & architecture decisions.",cl:'experience',pillars:['experience'],plays:['b2b'],loop:['activate'],sc:['experience']},
   {n:'Adobe Advertising',d:"Advertising layer for paid-media activation and optimization — usually adjacent to the core DX story.",cl:'experience',pillars:['experience'],plays:[],loop:['activate'],sc:['experience']},
 
   // — Document Cloud —
@@ -438,6 +553,7 @@ const P = [
   {n:'Acrobat Reader',d:"Free PDF viewer for reading, annotating and signing documents.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
   {n:'Acrobat Sign',d:"E-signature & approval workflows for secure, legally recognized digital signing.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
   {n:'Adobe Scan',d:"Mobile document capture that turns physical pages into digital workflow inputs.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
+  {n:'Acrobat online tools',d:"Browser-based PDF actions and lightweight document tasks for quick, no-install workflows.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']},
   {n:'Document Services / PDF APIs',d:"Developer-facing services for embedding PDF operations and document workflows into business applications.",cl:'document',pillars:['document'],plays:[],loop:['document'],sc:['document']}
 ];
 
@@ -503,6 +619,8 @@ function openDrawer(p){
   const loopHtml=LOOP.map((s,i)=>{ const on=p.loop.includes(s.k);
     return `<div class="d-loopstage ${on?'on':''}"><span class="num">${i+1}</span>${s.verb}<span class="bar"></span></div>`; }).join('');
   const flags=[]; if(p.b2b) flags.push('B2B edition'); if(p.legacy) flags.push('Legacy / installed base');
+  const spList=strategicPlaysFor(p.n);
+  const spHtml=spList.length?spList.map(s=>`<span class="tag">${s.name}</span>`).join(''):'<span class="tag none">Not tied to a specific strategic play</span>';
   const d=$('#drawer');
   d.innerHTML=`
     <button class="close" aria-label="Close">&times;</button>
@@ -512,6 +630,7 @@ function openDrawer(p){
     <p class="desc">${p.d}</p>
     <div class="d-sec"><div class="h">CXO pillar</div>${pillarsHtml}</div>
     <div class="d-sec"><div class="h">FY26 sales plays</div>${playsHtml}</div>
+    <div class="d-sec"><div class="h">FY26 strategic plays</div>${spHtml}</div>
     <div class="d-sec"><div class="h">Where it sits in the loop</div><div class="d-loop">${loopHtml}</div></div>`;
   d.querySelector('.close').onclick=closeDrawer;
   d.classList.add('show'); d.setAttribute('aria-hidden','false'); $('#scrim').classList.add('show');
@@ -572,14 +691,47 @@ function renderDiscovery(){
   });
 }
 
+/* SALES PLAYS */
+function chip(n){ return `<button data-n="${n}">${n}</button>`; }
+function bindChips(scope){ scope.querySelectorAll('button[data-n]').forEach(b=>b.onclick=()=>{const p=byName(b.dataset.n); if(p) openDrawer(p);}); }
+function renderPlays(){
+  const stack=$('#playStack'); stack.innerHTML='';
+  ['csc','ucx','b2b'].forEach(pk=>{
+    const g=SPLAYS[pk], meta=PLAY[pk];
+    const block=document.createElement('div'); block.className='playblock';
+    block.innerHTML=`<div class="pb-head"><h2>${meta.label}</h2><p class="pb-prob">${g.problem}</p></div>
+      <div class="pb-body">${g.items.map(it=>`<div class="splay"><div class="sp-name">${it.n}</div><div class="sp-chips">${it.prods.map(chip).join('')}</div></div>`).join('')}</div>`;
+    bindChips(block); stack.appendChild(block);
+  });
+  const h2=$('#h2refresh');
+  h2.innerHTML=`<h3>FY26 H2 framing refresh</h3>
+    <p class="h2-sub">Same products, same connections — the GTM emphasis shifts. Field teams may use either framing depending on timing and account context.</p>
+    <div class="h2-em">${H2.emphasized.map(e=>`<div class="e"><div class="et">${e.n}</div><div class="en">${e.note}</div></div>`).join('')}</div>
+    <div class="h2-sup"><b>Now treated as supporting plays &amp; tactics</b>${H2.supporting.map(s=>`<span class="pill">${s}</span>`).join('')}</div>`;
+  const cg=$('#clusterGrid'); cg.innerHTML='';
+  CLUSTERS.forEach(c=>{
+    const el=document.createElement('div'); el.className='cluster';
+    el.innerHTML=`<h4>${c.n}</h4><div class="cl-chips">${c.prods.map(chip).join('')}</div>`;
+    bindChips(el); cg.appendChild(el);
+  });
+}
+
 /* BY ROLE */
 function renderRoles(){
   const host=$('#roleGrid'); host.innerHTML='';
   ['ea','sc','sva'].forEach(rk=>{
     const r=ROLES[rk]; const active=currentRole===rk;
-    const prods = (r.priorities && r.priorities.length)
-      ? `<div class="rc-h">Key products</div><div class="rc-chips">${r.priorities.map(n=>`<button data-n="${n}">${n}</button>`).join('')}</div>`
-      : `<div class="rc-h">Works by</div><ul class="rc-list">${r.concerns.map(c=>`<li>${c}</li>`).join('')}</ul>`;
+    let prods='';
+    if(r.priorities && r.priorities.length){
+      prods += `<div class="rc-h">Key / anchor products</div><div class="rc-chips">${r.priorities.map(n=>`<button data-n="${n}">${n}</button>`).join('')}</div>`;
+    }
+    if(r.concerns && r.concerns.length){
+      prods += `<div class="rc-h">Works by</div><ul class="rc-list">${r.concerns.map(c=>`<li>${c}</li>`).join('')}</ul>`;
+    }
+    if(r.expansion && r.expansion.length){
+      prods += `<div class="rc-h">Common expansion paths</div><div class="rc-plays">`+
+        r.expansion.map(e=>`<div class="rc-play"><span class="rc-pl">${e.from} \u2192</span><span class="rc-pd">${e.to.join(' \u00b7 ')}</span></div>`).join('')+`</div>`;
+    }
     const plays = `<div class="rc-h">Across the FY26 plays</div><div class="rc-plays">`+
       ['csc','ucx','b2b'].map(pk=>`<div class="rc-play"><span class="rc-pl">${PLAY[pk].label}</span><span class="rc-pd">${r.play[pk]}</span></div>`).join('')+`</div>`;
     const el=document.createElement('div'); el.className='rolecard'+(active?' active':'');
@@ -599,7 +751,7 @@ function setRole(r){
   const ctx=$('#rbContext');
   if(r==='all'){ ctx.style.display='none'; ctx.innerHTML=''; }
   else{ const R=ROLES[r]; ctx.style.display='block'; ctx.innerHTML=`<b>Best lens</b>${R.lens} <span class="rb-dot">&middot;</span> <b>Needs</b>${R.need}`; }
-  renderGroups(); renderDiscovery(); renderRoles(); renderRoles();
+  renderGroups(); renderDiscovery(); renderRoles();
   if($('#p-loop').classList.contains('active')){ renderLoop(); $$('.lstage').forEach(el=>el.classList.add('in')); }
 }
 
@@ -672,6 +824,7 @@ function setMode(m){
   $('#p-'+m).classList.add('active');
   $('.search').style.visibility = (m==='explore')?'visible':'hidden';
   if(m==='loop'){ loopShown=false; renderLoop(); requestAnimationFrame(()=>setTimeout(animateLoop,60)); }
+  if(m==='plays'){ renderPlays(); }
   if(m==='roles'){ renderRoles(); }
   if(m==='quiz' && qNum===0){ renderQuiz(); }
 }
